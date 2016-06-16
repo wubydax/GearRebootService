@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gear Reboot</string>
+    <string name="power_off">כיבוי</string>
+    <string name="reboot">הפעלה מחדש</string>
+    <string name="reboot_recovery">הפעלה למצב רקברי</string>
+</resources>

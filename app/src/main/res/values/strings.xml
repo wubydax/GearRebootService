@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Gear Reboot</string>
+    <string name="global_action_icon" translatable="false">global action icon</string>
+    <string name="reboot">Reboot</string>
+    <string name="reboot_recovery">Reboot recovery</string>
+    <string name="power_off">Power off</string>
+</resources>
