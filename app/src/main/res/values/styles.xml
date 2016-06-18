@@ -1,14 +1,12 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
+    <style name="MyDialogTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:windowAnimationStyle">@style/MyDialogWindowAnimation</item>
     </style>
 
-
-
+    <style name="MyDialogWindowAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
 
 </resources>

@@ -17,16 +17,21 @@
         android:paddingBottom="72dp"
         android:paddingTop="72dp"
         android:weightSum="3"
-        android:id="@+id/rebootContainer">
-        <LinearLayout
+        android:id="@+id/rebootContainer"
+        android:layout_gravity="center_vertical">
+        <FrameLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:orientation="vertical"
             android:id="@+id/mainReboot"
             >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:layout_width="76dp"
@@ -48,16 +53,21 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 />
+            </LinearLayout>
 
-        </LinearLayout>
-        <LinearLayout
+        </FrameLayout>
+        <FrameLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:orientation="vertical"
             android:id="@+id/recoveryReboot">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:layout_width="76dp"
@@ -78,16 +88,22 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:text="@string/reboot_recovery"/>
-        </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:orientation="vertical"
             android:id="@+id/powerOff">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
             <ImageView
                 android:layout_width="76dp"
@@ -109,7 +125,8 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:text="@string/power_off"/>
-        </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 
 </FrameLayout>

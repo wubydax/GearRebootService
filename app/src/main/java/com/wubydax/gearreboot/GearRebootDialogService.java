@@ -1,19 +1,17 @@
 package com.wubydax.gearreboot;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Service;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -22,25 +20,14 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceControl;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
-public class GearRebootService extends Service implements View.OnClickListener {
+public class GearRebootDialogService extends Service implements View.OnClickListener {
+    private AlertDialog mDialog;
 
-    private WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                    | WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            PixelFormat.RGBA_8888);
-    private WindowManager mWindowManager;
-    private View mMainView;
+    public GearRebootDialogService() {
+    }
 
-
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -49,40 +36,44 @@ public class GearRebootService extends Service implements View.OnClickListener {
     @Override
     public void onCreate() {
         super.onCreate();
-        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        setUpViews();
-
+        showDialog();
     }
 
-    @SuppressLint("InflateParams")
-    private void setUpViews() {
-        mMainView = LayoutInflater.from(this).inflate(com.wubydax.gearreboot.R.layout.global_actions_reboot_view, null);
-        View protectiveView = mMainView.findViewById(com.wubydax.gearreboot.R.id.protectiveView);
-        protectiveView.setOnClickListener(this);
-        mMainView.findViewById(R.id.mainReboot).setOnClickListener(this);
-        mMainView.findViewById(R.id.recoveryReboot).setOnClickListener(this);
-        mMainView.findViewById(R.id.powerOff).setOnClickListener(this);
-        Bitmap bitmap = getBlurredScreenshot();
-        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-        mMainView.setBackgroundDrawable(drawable);
-        mMainView.setAlpha(0f);
-        mMainView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) { //Not tested, not sure will work
-                    stopSelf();
-                    return true;
-                }
-                return true;
-            }
-        });
-        mWindowManager.addView(mMainView, mLayoutParams);
-        mMainView.animate().alpha(1f).setDuration(500);
+    private void showDialog() {
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.global_actions_reboot_view, null);
+        Drawable drawable = new BitmapDrawable(getResources(), getBlurredScreenshot());
+        view.findViewById(R.id.mainReboot).setOnClickListener(this);
+        view.findViewById(R.id.recoveryReboot).setOnClickListener(this);
+        view.findViewById(R.id.powerOff).setOnClickListener(this);
+        view.findViewById(R.id.protectiveView).setOnClickListener(this);
+        mDialog = new AlertDialog.Builder(this, R.style.MyDialogTheme)
+                .setView(view)
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                            stopSelf();
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                })
+                .create();
+        mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
+        mDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        mDialog.show();
+        mDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        mDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT);
+
+        mDialog.getWindow().setBackgroundDrawable(drawable);
 
     }
 
     private Bitmap getBlurredScreenshot() {
-        Display display = mWindowManager.getDefaultDisplay();
+        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         Matrix matrix = new Matrix();
         float[] dims = {displayMetrics.widthPixels, displayMetrics.heightPixels};
@@ -108,6 +99,7 @@ public class GearRebootService extends Service implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         int id = v.getId();
         switch (id) {
@@ -129,30 +121,13 @@ public class GearRebootService extends Service implements View.OnClickListener {
 
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMainView.animate().alpha(0f).setDuration(500).setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mWindowManager.removeView(mMainView);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-        });
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
     }
 
     @Override
@@ -161,11 +136,7 @@ public class GearRebootService extends Service implements View.OnClickListener {
         stopSelf();
     }
 
-    /* If you are using this algorithm in your code please add
-    the following line:
-    Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
-    */
-
+    /*Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>*/
     public Bitmap getBlurredImage(Bitmap sentBitmap, float scale, int radius) {
 
         int width = Math.round(sentBitmap.getWidth() * scale);
@@ -373,6 +344,4 @@ public class GearRebootService extends Service implements View.OnClickListener {
 
         return (bitmap);
     }
-
-
 }
