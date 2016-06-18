@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceControl;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
 public class GearRebootDialogService extends Service implements View.OnClickListener {
@@ -51,12 +52,8 @@ public class GearRebootDialogService extends Service implements View.OnClickList
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            stopSelf();
-                            return true;
-                        } else {
-                            return false;
-                        }
+                        stopSelf();
+                        return true;
                     }
                 })
                 .create();
@@ -71,6 +68,8 @@ public class GearRebootDialogService extends Service implements View.OnClickList
         mDialog.getWindow().setBackgroundDrawable(drawable);
 
     }
+
+
 
     private Bitmap getBlurredScreenshot() {
         Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
