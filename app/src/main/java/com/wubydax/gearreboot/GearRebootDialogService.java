@@ -23,6 +23,20 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
+/*      Created by Roberto Mariani and Anna Berkovitch, 16/06/2016
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
+        You should have received a copy of the GNU General Public License
+        along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
+
 public class GearRebootDialogService extends Service implements View.OnClickListener {
     private AlertDialog mDialog;
 
@@ -73,11 +87,11 @@ public class GearRebootDialogService extends Service implements View.OnClickList
 
     private Bitmap getBlurredScreenshot() {
         Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+        float degrees = getDegreesForRotation(display.getRotation());
         DisplayMetrics displayMetrics = new DisplayMetrics();
         Matrix matrix = new Matrix();
-        float[] dims = {displayMetrics.widthPixels, displayMetrics.heightPixels};
-        float degrees = getDegreesForRotation(display.getRotation());
         matrix.postRotate(degrees);
+        float[] dims = {displayMetrics.widthPixels, displayMetrics.heightPixels};
         Bitmap bitmap = SurfaceControl.screenshot((int) dims[0], (int) dims[1]);
         Bitmap blurredBitmap = getBlurredImage(bitmap, 0.3f, 50);
         return Bitmap.createBitmap(blurredBitmap, 0, 0, blurredBitmap.getWidth(), blurredBitmap.getHeight(), matrix, true);
