@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GearReboot.iml" filepath="$PROJECT_DIR$/GearReboot.iml" />
+      <module fileurl="file://C:\Users\Dax\AndroidStudioProjects\GearRebootService\GearReboot.iml" filepath="C:\Users\Dax\AndroidStudioProjects\GearRebootService\GearReboot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/GearRebootService.iml" filepath="$PROJECT_DIR$/.idea/GearRebootService.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Dax\AndroidStudioProjects\GearRebootService\app\app.iml" filepath="C:\Users\Dax\AndroidStudioProjects\GearRebootService\app\app.iml" />
     </modules>
   </component>
 </project>

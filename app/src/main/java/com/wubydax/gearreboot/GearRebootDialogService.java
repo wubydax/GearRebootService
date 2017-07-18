@@ -73,7 +73,7 @@ public class GearRebootDialogService extends Service implements View.OnClickList
                 .create();
         mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
         mDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mDialog.show();
         mDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         mDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
